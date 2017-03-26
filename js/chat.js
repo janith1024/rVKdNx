@@ -181,8 +181,10 @@
 
     $('.mdi-send').on('click', function() {
         var chatmessage = '<p>' + $('.chat-input').val() + '</p>';
-        $('ul.chat > li > .current').append(chatmessage);
+        $("#chatMainList").append("<li><img src='http://s8.postimg.org/76bg2es2t/index.png'>" +
+            "<div class='message'>"+chatmessage+"</div></li>");
         $('.chat-input').val('');
+        messages.push({message: chatmessage,sender: window.getUserId(),receiver : window.currentUserId})
 
         $.ajax({
             url: "http://34.192.103.7:8080/t-talk/ws/chat",
@@ -193,7 +195,7 @@
             success: function (data) {
             },
             error: function (err) {
-                alert(err);
+                console.log(err);
             }
         });
 
