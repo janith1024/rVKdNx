@@ -8,6 +8,17 @@ $('#login').click(function(){
         email: $("#email").val(),
         password:$("#password").val()
     };
+
+    if(SendInfo.email == 'smsl.cs@gmail.com'){
+        setUser(1)
+    } else if(SendInfo.email == 'ashokae@gmail.com'){
+        setUser(2)
+    } else if(SendInfo.email == 'kalpanie@gmail.com'){
+        setUser(3);
+    } else {
+        setUser(3);
+    }
+/*
     $.ajax({
         type : 'POST',
         url : 'http://34.192.103.7:8080/t-talk/ws/users/login',
@@ -31,11 +42,10 @@ $('#login').click(function(){
             }
         }
 
-    });
+    });*/
 });
 
 function setUser(id) {
-
     $.ajax({
         type: 'GET',
         url: 'http://34.192.103.7:8080/t-talk/ws/user/'+id,
@@ -43,13 +53,13 @@ function setUser(id) {
         dataType: 'json',
         success: function (user) {
             if(user){
+                localStorage.setItem('UserId', user.userId); //set
                 localStorage.setItem('User', user); //set
                 localStorage.setItem('username', user.displayName); //set
                 window.location.href = "chat.html";
             }
         }
     });
-
 }
 
 $( document ).ready(function() {

@@ -8,6 +8,12 @@ var messages = [];
 
 function start() {
 
+    setInterval("pollOnlineUsers()", 2000);
+    setInterval("pollChatMessages()", 2000);
+
+}
+
+function pollOnlineUsers(){
     $.ajax({
         type: 'GET',
         url: 'http://34.192.103.7:8080/t-talk/ws/onlineUsers',
@@ -22,15 +28,13 @@ function start() {
                     buffer += "<li onclick='onlineClick(" + item.userId + ")'><img src='images/user.jpg'><div class='content-container'>" +
                         "<span class='name'>" + item.displayName + "</span><i class='mdi mdi-menu-down'></i> </div></li>";
                 }
-
             }
             $('.onlineList').html(buffer);
         }
     });
 
-    setInterval("pollChatMessages()", 2000);
-
 }
+
 
 function onlineClick(id) {
     currentUserId = id;
@@ -69,10 +73,16 @@ function pollChatMessages() {
                 var state = msgObject.state;
                 if (state == "chat") {
                     if (msgObject.message != "\n" && msgObject.message != "") {
-                        messages.push(msgObject)
+                        messages.push(msgObject);
+                        //alert("current user" + msgObject.window.currentUserId);
                         if (msgObject.sender == window.currentUserId) {
+                            //alert(msgObject.message);
+
                             $("#chatMainList").append("<li><img src='images/user.jpg'>" +
                                 "<div class='message'>" + msgObject.message + "</div></li>");
+                        }
+                        else{
+                            //alert(msgObject.senderDisplayName+ " : " + msgObject.message );
                         }
 
                     }
@@ -92,7 +102,7 @@ function getUserId() {
             userId = user.userId;
         }
         else {
-            userId = 3;
+            userId = localStorage.getItem('UserId');
         }
     }
     return userId;
